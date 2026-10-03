@@ -1,0 +1,2139 @@
+{
+  "title": "VCA | Application Portfolio | Light v13",
+  "layout_type": "ordered",
+  "reflow_type": "fixed",
+  "description": "v13 | Resource peaks and trends over 1 hour. 8 logical applications / 18 registered hosts. Production Saved View = production OR prd. Blank cockpit links must be configured after import. Light visual theme.",
+  "template_variables": [
+    {
+      "name": "environment",
+      "prefix": "environment",
+      "available_values": [
+        "test",
+        "quality",
+        "pre-production",
+        "production",
+        "prd"
+      ],
+      "defaults": [
+        "production",
+        "prd"
+      ]
+    }
+  ],
+  "template_variable_presets": [
+    {
+      "name": "Production",
+      "template_variables": [
+        {
+          "name": "environment",
+          "values": [
+            "production",
+            "prd"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Pre-production",
+      "template_variables": [
+        {
+          "name": "environment",
+          "values": [
+            "pre-production"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Quality",
+      "template_variables": [
+        {
+          "name": "environment",
+          "values": [
+            "quality"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Test",
+      "template_variables": [
+        {
+          "name": "environment",
+          "values": [
+            "test"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "All environments",
+      "template_variables": [
+        {
+          "name": "environment",
+          "values": [
+            "*"
+          ]
+        }
+      ]
+    }
+  ],
+  "widgets": [
+    {
+      "definition": {
+        "type": "wildcard",
+        "title": "VCA | Application portfolio · Light",
+        "time": {
+          "live_span": "1h"
+        },
+        "requests": [
+          {
+            "response_format": "scalar",
+            "queries": [
+              {
+                "data_source": "metrics",
+                "name": "cpu_idle",
+                "query": "min:system.cpu.idle{maison:vca AND ((application:app07656 AND host IN (sapp01055)) OR (application:app07739 AND host IN (sapp01051,sapp01077)) OR (application:app08213 AND host IN (sapp01078,sapp01098)) OR (application:app05236 AND host IN (sapp00185,sapp00184,sapp01044,sapp01045,sapp00178,sapp00177,sapp00175,sapp00176)) OR (application:app05236 AND host IN (sapp01129)) OR (application:app05236 AND host IN (slic00025)) OR (application:app05236 AND host IN (slic00027)) OR (application:app06976 AND host IN (sapp00951,sora00003))) AND environment IN (test,quality,pre-production,production,prd) AND $environment} by {application,host}.fill(null)",
+                "aggregator": "min"
+              },
+              {
+                "data_source": "metrics",
+                "name": "ram_available",
+                "query": "min:system.mem.pct_usable{maison:vca AND ((application:app07656 AND host IN (sapp01055)) OR (application:app07739 AND host IN (sapp01051,sapp01077)) OR (application:app08213 AND host IN (sapp01078,sapp01098)) OR (application:app05236 AND host IN (sapp00185,sapp00184,sapp01044,sapp01045,sapp00178,sapp00177,sapp00175,sapp00176)) OR (application:app05236 AND host IN (sapp01129)) OR (application:app05236 AND host IN (slic00025)) OR (application:app05236 AND host IN (slic00027)) OR (application:app06976 AND host IN (sapp00951,sora00003))) AND environment IN (test,quality,pre-production,production,prd) AND $environment} by {application,host}.fill(null)",
+                "aggregator": "min"
+              },
+              {
+                "data_source": "metrics",
+                "name": "disk_used",
+                "query": "max:system.disk.in_use{maison:vca AND ((application:app07656 AND host IN (sapp01055)) OR (application:app07739 AND host IN (sapp01051,sapp01077)) OR (application:app08213 AND host IN (sapp01078,sapp01098)) OR (application:app05236 AND host IN (sapp00185,sapp00184,sapp01044,sapp01045,sapp00178,sapp00177,sapp00175,sapp00176)) OR (application:app05236 AND host IN (sapp01129)) OR (application:app05236 AND host IN (slic00025)) OR (application:app05236 AND host IN (slic00027)) OR (application:app06976 AND host IN (sapp00951,sora00003))) AND environment IN (test,quality,pre-production,production,prd) AND $environment} by {application,host}.fill(null)",
+                "aggregator": "max"
+              }
+            ],
+            "formulas": [
+              {
+                "formula": "100 - cpu_idle",
+                "alias": "cpu_pct"
+              },
+              {
+                "formula": "100 * (1 - ram_available)",
+                "alias": "ram_pct"
+              },
+              {
+                "formula": "100 * disk_used",
+                "alias": "disk_pct"
+              }
+            ],
+            "sort": {
+              "count": 100,
+              "order_by": [
+                {
+                  "type": "group",
+                  "name": "application",
+                  "order": "asc"
+                }
+              ]
+            }
+          },
+          {
+            "response_format": "timeseries",
+            "queries": [
+              {
+                "data_source": "metrics",
+                "name": "idle",
+                "query": "avg:system.cpu.idle{maison:vca AND ((application:app07656 AND host IN (sapp01055)) OR (application:app07739 AND host IN (sapp01051,sapp01077)) OR (application:app08213 AND host IN (sapp01078,sapp01098)) OR (application:app05236 AND host IN (sapp00185,sapp00184,sapp01044,sapp01045,sapp00178,sapp00177,sapp00175,sapp00176)) OR (application:app05236 AND host IN (sapp01129)) OR (application:app05236 AND host IN (slic00025)) OR (application:app05236 AND host IN (slic00027)) OR (application:app06976 AND host IN (sapp00951,sora00003))) AND environment IN (test,quality,pre-production,production,prd) AND $environment} by {application,host}.fill(null)"
+              },
+              {
+                "data_source": "metrics",
+                "name": "usable",
+                "query": "avg:system.mem.pct_usable{maison:vca AND ((application:app07656 AND host IN (sapp01055)) OR (application:app07739 AND host IN (sapp01051,sapp01077)) OR (application:app08213 AND host IN (sapp01078,sapp01098)) OR (application:app05236 AND host IN (sapp00185,sapp00184,sapp01044,sapp01045,sapp00178,sapp00177,sapp00175,sapp00176)) OR (application:app05236 AND host IN (sapp01129)) OR (application:app05236 AND host IN (slic00025)) OR (application:app05236 AND host IN (slic00027)) OR (application:app06976 AND host IN (sapp00951,sora00003))) AND environment IN (test,quality,pre-production,production,prd) AND $environment} by {application,host}.fill(null)"
+              }
+            ],
+            "formulas": [
+              {
+                "formula": "100-idle",
+                "alias": "cpu_pct"
+              },
+              {
+                "formula": "100*(1-usable)",
+                "alias": "ram_pct"
+              }
+            ]
+          },
+          {
+            "response_format": "scalar",
+            "queries": [
+              {
+                "data_source": "metrics",
+                "name": "disk",
+                "query": "max:system.disk.in_use{maison:vca AND ((application:app07656 AND host IN (sapp01055)) OR (application:app07739 AND host IN (sapp01051,sapp01077)) OR (application:app08213 AND host IN (sapp01078,sapp01098)) OR (application:app05236 AND host IN (sapp00185,sapp00184,sapp01044,sapp01045,sapp00178,sapp00177,sapp00175,sapp00176)) OR (application:app05236 AND host IN (sapp01129)) OR (application:app05236 AND host IN (slic00025)) OR (application:app05236 AND host IN (slic00027)) OR (application:app06976 AND host IN (sapp00951,sora00003))) AND environment IN (test,quality,pre-production,production,prd) AND $environment} by {application,host,device}.fill(null)",
+                "aggregator": "max"
+              }
+            ],
+            "formulas": [
+              {
+                "formula": "100*disk",
+                "alias": "disk_pct"
+              }
+            ],
+            "sort": {
+              "count": 100,
+              "order_by": [
+                {
+                  "type": "group",
+                  "name": "application",
+                  "order": "asc"
+                }
+              ]
+            }
+          }
+        ],
+        "specification": {
+          "type": "vega",
+          "contents": {
+            "$schema": "https://vega.github.io/schema/vega/v5.json",
+            "padding": 12,
+            "background": "#f2f5fa",
+            "autosize": {
+              "type": "fit-x",
+              "contains": "padding",
+              "resize": true
+            },
+            "signals": [
+              {
+                "name": "width",
+                "init": "containerSize()[0] > 0 ? containerSize()[0] : 1400",
+                "on": [
+                  {
+                    "events": "window:resize",
+                    "update": "containerSize()[0] > 0 ? containerSize()[0] : width"
+                  },
+                  {
+                    "events": {
+                      "type": "timer",
+                      "throttle": 1000
+                    },
+                    "update": "containerSize()[0] > 0 ? containerSize()[0] : width"
+                  }
+                ]
+              },
+              {
+                "name": "gap",
+                "value": 14
+              },
+              {
+                "name": "warning",
+                "value": 85
+              },
+              {
+                "name": "critical",
+                "value": 95
+              },
+              {
+                "name": "maxColumns",
+                "value": 4
+              },
+              {
+                "name": "minCardWidth",
+                "value": 290
+              },
+              {
+                "name": "cardHeight",
+                "value": 320
+              },
+              {
+                "name": "columns",
+                "update": "max(1,min(maxColumns,length(data('catalog')),floor((width+gap)/(minCardWidth+gap))))"
+              },
+              {
+                "name": "cardWidth",
+                "update": "(width-(columns-1)*gap)/columns"
+              },
+              {
+                "name": "height",
+                "update": "40+ceil(length(data('catalog'))/columns)*(cardHeight+gap)+26"
+              }
+            ],
+            "data": [
+              {
+                "name": "table1"
+              },
+              {
+                "name": "table2"
+              },
+              {
+                "name": "table3"
+              },
+              {
+                "name": "catalog",
+                "values": [
+                  {
+                    "entity": "sage100",
+                    "application": "app07656",
+                    "label": "Sage 100",
+                    "order": 0,
+                    "subtitle": "app07656 · 1 registered hosts",
+                    "cockpit_url": ""
+                  },
+                  {
+                    "entity": "solutyo",
+                    "application": "app07739",
+                    "label": "Solutyo",
+                    "order": 1,
+                    "subtitle": "app07739 · 2 registered hosts",
+                    "cockpit_url": ""
+                  },
+                  {
+                    "entity": "neofugu",
+                    "application": "app08213",
+                    "label": "Neofugu",
+                    "order": 2,
+                    "subtitle": "app08213 · 2 registered hosts",
+                    "cockpit_url": ""
+                  },
+                  {
+                    "entity": "orion",
+                    "application": "app05236",
+                    "label": "VCA Orion",
+                    "order": 3,
+                    "subtitle": "app05236 · 8 registered hosts",
+                    "cockpit_url": ""
+                  },
+                  {
+                    "entity": "magics-lm",
+                    "application": "app05236",
+                    "label": "Magics LM",
+                    "order": 4,
+                    "subtitle": "app05236 · 1 registered hosts",
+                    "cockpit_url": ""
+                  },
+                  {
+                    "entity": "solidworks-lm",
+                    "application": "app05236",
+                    "label": "Solidworks LM",
+                    "order": 5,
+                    "subtitle": "app05236 · 1 registered hosts",
+                    "cockpit_url": ""
+                  },
+                  {
+                    "entity": "hypermill-lm",
+                    "application": "app05236",
+                    "label": "Hypermill LM",
+                    "order": 6,
+                    "subtitle": "app05236 · 1 registered hosts",
+                    "cockpit_url": ""
+                  },
+                  {
+                    "entity": "proconcept",
+                    "application": "app06976",
+                    "label": "Proconcept",
+                    "order": 7,
+                    "subtitle": "app06976 · 2 registered hosts",
+                    "cockpit_url": ""
+                  }
+                ]
+              },
+              {
+                "name": "host_directory",
+                "values": [
+                  {
+                    "host": "sapp01055",
+                    "entity": "sage100",
+                    "expected_application": "app07656"
+                  },
+                  {
+                    "host": "sapp01051",
+                    "entity": "solutyo",
+                    "expected_application": "app07739"
+                  },
+                  {
+                    "host": "sapp01077",
+                    "entity": "solutyo",
+                    "expected_application": "app07739"
+                  },
+                  {
+                    "host": "sapp01078",
+                    "entity": "neofugu",
+                    "expected_application": "app08213"
+                  },
+                  {
+                    "host": "sapp01098",
+                    "entity": "neofugu",
+                    "expected_application": "app08213"
+                  },
+                  {
+                    "host": "sapp00185",
+                    "entity": "orion",
+                    "expected_application": "app05236"
+                  },
+                  {
+                    "host": "sapp00184",
+                    "entity": "orion",
+                    "expected_application": "app05236"
+                  },
+                  {
+                    "host": "sapp01044",
+                    "entity": "orion",
+                    "expected_application": "app05236"
+                  },
+                  {
+                    "host": "sapp01045",
+                    "entity": "orion",
+                    "expected_application": "app05236"
+                  },
+                  {
+                    "host": "sapp00178",
+                    "entity": "orion",
+                    "expected_application": "app05236"
+                  },
+                  {
+                    "host": "sapp00177",
+                    "entity": "orion",
+                    "expected_application": "app05236"
+                  },
+                  {
+                    "host": "sapp00175",
+                    "entity": "orion",
+                    "expected_application": "app05236"
+                  },
+                  {
+                    "host": "sapp00176",
+                    "entity": "orion",
+                    "expected_application": "app05236"
+                  },
+                  {
+                    "host": "sapp01129",
+                    "entity": "magics-lm",
+                    "expected_application": "app05236"
+                  },
+                  {
+                    "host": "slic00025",
+                    "entity": "solidworks-lm",
+                    "expected_application": "app05236"
+                  },
+                  {
+                    "host": "slic00027",
+                    "entity": "hypermill-lm",
+                    "expected_application": "app05236"
+                  },
+                  {
+                    "host": "sapp00951",
+                    "entity": "proconcept",
+                    "expected_application": "app06976"
+                  },
+                  {
+                    "host": "sora00003",
+                    "entity": "proconcept",
+                    "expected_application": "app06976"
+                  }
+                ]
+              },
+              {
+                "name": "observed",
+                "source": "table1",
+                "transform": [
+                  {
+                    "type": "lookup",
+                    "from": "host_directory",
+                    "key": "host",
+                    "fields": [
+                      "host"
+                    ],
+                    "values": [
+                      "entity",
+                      "expected_application"
+                    ],
+                    "as": [
+                      "entity",
+                      "expected_application"
+                    ],
+                    "default": null
+                  },
+                  {
+                    "type": "filter",
+                    "expr": "isValid(datum.entity) && datum.application == datum.expected_application"
+                  },
+                  {
+                    "type": "formula",
+                    "as": "safe_cpu_pct",
+                    "expr": "isNumber(datum.cpu_pct) && isFinite(datum.cpu_pct) && datum.cpu_pct>=0 && datum.cpu_pct<=100 ? datum.cpu_pct : null"
+                  },
+                  {
+                    "type": "formula",
+                    "as": "safe_ram_pct",
+                    "expr": "isNumber(datum.ram_pct) && isFinite(datum.ram_pct) && datum.ram_pct>=0 && datum.ram_pct<=100 ? datum.ram_pct : null"
+                  },
+                  {
+                    "type": "formula",
+                    "as": "safe_disk_pct",
+                    "expr": "isNumber(datum.disk_pct) && isFinite(datum.disk_pct) && datum.disk_pct>=0 && datum.disk_pct<=100 ? datum.disk_pct : null"
+                  },
+                  {
+                    "type": "aggregate",
+                    "groupby": [
+                      "entity"
+                    ],
+                    "fields": [
+                      "safe_cpu_pct",
+                      "safe_ram_pct",
+                      "safe_disk_pct"
+                    ],
+                    "ops": [
+                      "max",
+                      "max",
+                      "max"
+                    ],
+                    "as": [
+                      "cpu",
+                      "ram",
+                      "disk"
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "volume_rows",
+                "source": "table3",
+                "transform": [
+                  {
+                    "type": "lookup",
+                    "from": "host_directory",
+                    "key": "host",
+                    "fields": [
+                      "host"
+                    ],
+                    "values": [
+                      "entity",
+                      "expected_application"
+                    ],
+                    "as": [
+                      "entity",
+                      "expected_application"
+                    ],
+                    "default": null
+                  },
+                  {
+                    "type": "filter",
+                    "expr": "isValid(datum.entity) && datum.application == datum.expected_application"
+                  },
+                  {
+                    "type": "filter",
+                    "expr": "isNumber(datum.disk_pct) && isFinite(datum.disk_pct) && datum.disk_pct>=0 && datum.disk_pct<=100"
+                  },
+                  {
+                    "type": "window",
+                    "groupby": [
+                      "entity"
+                    ],
+                    "sort": {
+                      "field": [
+                        "disk_pct",
+                        "host",
+                        "device"
+                      ],
+                      "order": [
+                        "descending",
+                        "ascending",
+                        "ascending"
+                      ]
+                    },
+                    "ops": [
+                      "row_number"
+                    ],
+                    "as": [
+                      "rank"
+                    ]
+                  },
+                  {
+                    "type": "filter",
+                    "expr": "datum.rank==1"
+                  },
+                  {
+                    "type": "formula",
+                    "as": "drive",
+                    "expr": "test(/^[a-zA-Z]:/,datum.device) ? upper(substring(datum.device,0,2)) : datum.device"
+                  }
+                ]
+              },
+              {
+                "name": "cards",
+                "source": "catalog",
+                "transform": [
+                  {
+                    "type": "lookup",
+                    "from": "observed",
+                    "key": "entity",
+                    "fields": [
+                      "entity"
+                    ],
+                    "values": [
+                      "cpu",
+                      "ram",
+                      "disk"
+                    ],
+                    "as": [
+                      "cpu",
+                      "ram",
+                      "disk"
+                    ],
+                    "default": null
+                  },
+                  {
+                    "type": "lookup",
+                    "from": "volume_rows",
+                    "key": "entity",
+                    "fields": [
+                      "entity"
+                    ],
+                    "values": [
+                      "drive",
+                      "disk_pct",
+                      "host"
+                    ],
+                    "as": [
+                      "drive",
+                      "volume_pct",
+                      "volume_host"
+                    ],
+                    "default": null
+                  },
+                  {
+                    "type": "formula",
+                    "as": "cpu_valid",
+                    "expr": "isNumber(datum.cpu) && isFinite(datum.cpu) && datum.cpu>=0 && datum.cpu<=100"
+                  },
+                  {
+                    "type": "formula",
+                    "as": "ram_valid",
+                    "expr": "isNumber(datum.ram) && isFinite(datum.ram) && datum.ram>=0 && datum.ram<=100"
+                  },
+                  {
+                    "type": "formula",
+                    "as": "disk_valid",
+                    "expr": "isNumber(datum.disk) && isFinite(datum.disk) && datum.disk>=0 && datum.disk<=100"
+                  },
+                  {
+                    "type": "formula",
+                    "as": "count",
+                    "expr": "(datum.cpu_valid?1:0)+(datum.ram_valid?1:0)+(datum.disk_valid?1:0)"
+                  },
+                  {
+                    "type": "formula",
+                    "as": "pressure",
+                    "expr": "max(datum.cpu_valid?datum.cpu:-1,datum.ram_valid?datum.ram:-1,datum.disk_valid?datum.disk:-1)"
+                  },
+                  {
+                    "type": "formula",
+                    "as": "color",
+                    "expr": "datum.count==0 ? '#8493a5' : datum.pressure>=critical ? '#c72d45' : datum.pressure>=warning ? '#ad6500' : datum.count<3 ? '#8493a5' : '#177e4b'"
+                  },
+                  {
+                    "type": "formula",
+                    "as": "score",
+                    "expr": "datum.count==3 ? format(datum.pressure,'.0f')+'%' : 'N/A'"
+                  },
+                  {
+                    "type": "formula",
+                    "as": "cx",
+                    "expr": "(datum.order%columns)*(cardWidth+gap)"
+                  },
+                  {
+                    "type": "formula",
+                    "as": "cy",
+                    "expr": "34+floor(datum.order/columns)*(cardHeight+gap)"
+                  }
+                ]
+              },
+              {
+                "name": "trends_raw",
+                "source": "table2",
+                "transform": [
+                  {
+                    "type": "lookup",
+                    "from": "host_directory",
+                    "key": "host",
+                    "fields": [
+                      "host"
+                    ],
+                    "values": [
+                      "entity",
+                      "expected_application"
+                    ],
+                    "as": [
+                      "entity",
+                      "expected_application"
+                    ],
+                    "default": null
+                  },
+                  {
+                    "type": "filter",
+                    "expr": "isValid(datum.entity) && datum.application == datum.expected_application"
+                  },
+                  {
+                    "type": "filter",
+                    "expr": "isNumber(datum._time)"
+                  },
+                  {
+                    "type": "formula",
+                    "as": "safe_cpu_pct",
+                    "expr": "isNumber(datum.cpu_pct) && isFinite(datum.cpu_pct) && datum.cpu_pct>=0 && datum.cpu_pct<=100 ? datum.cpu_pct : null"
+                  },
+                  {
+                    "type": "formula",
+                    "as": "safe_ram_pct",
+                    "expr": "isNumber(datum.ram_pct) && isFinite(datum.ram_pct) && datum.ram_pct>=0 && datum.ram_pct<=100 ? datum.ram_pct : null"
+                  },
+                  {
+                    "type": "aggregate",
+                    "groupby": [
+                      "entity",
+                      "_time"
+                    ],
+                    "fields": [
+                      "safe_cpu_pct",
+                      "safe_ram_pct"
+                    ],
+                    "ops": [
+                      "max",
+                      "max"
+                    ],
+                    "as": [
+                      "cpu_pct",
+                      "ram_pct"
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "trends",
+                "source": "trends_raw",
+                "transform": [
+                  {
+                    "type": "lookup",
+                    "from": "cards",
+                    "key": "entity",
+                    "fields": [
+                      "entity"
+                    ],
+                    "values": [
+                      "cx",
+                      "cy"
+                    ],
+                    "as": [
+                      "cx",
+                      "cy"
+                    ]
+                  },
+                  {
+                    "type": "collect",
+                    "sort": {
+                      "field": "_time"
+                    }
+                  }
+                ]
+              }
+            ],
+            "marks": [
+              {
+                "type": "text",
+                "name": "header",
+                "encode": {
+                  "update": {
+                    "x": {
+                      "signal": "0"
+                    },
+                    "y": {
+                      "signal": "12"
+                    },
+                    "text": {
+                      "value": "8 APPLICATIONS · 18 REGISTERED HOSTS · RESOURCE PEAKS / TRENDS OVER 1 HOUR"
+                    },
+                    "font": {
+                      "value": "Segoe UI"
+                    },
+                    "fontSize": {
+                      "value": 11
+                    },
+                    "baseline": {
+                      "value": "middle"
+                    },
+                    "fill": {
+                      "value": "#51657d"
+                    },
+                    "limit": {
+                      "signal": "width"
+                    }
+                  }
+                }
+              },
+              {
+                "type": "rect",
+                "name": "card",
+                "encode": {
+                  "update": {
+                    "x": {
+                      "signal": "datum.cx"
+                    },
+                    "y": {
+                      "signal": "datum.cy"
+                    },
+                    "width": {
+                      "signal": "cardWidth"
+                    },
+                    "height": {
+                      "signal": "cardHeight"
+                    },
+                    "fill": {
+                      "value": "#ffffff"
+                    },
+                    "cornerRadius": {
+                      "value": 5
+                    },
+                    "stroke": {
+                      "value": "#c6d3e2"
+                    },
+                    "strokeWidth": {
+                      "value": 1
+                    },
+                    "tooltip": {
+                      "signal": "{'Application':datum.label,'CPU %':datum.cpu,'RAM %':datum.ram,'Disk %':datum.disk,'Volume':datum.drive,'Volume host':datum.volume_host,'Meaning':'Resource pressure, not availability'}"
+                    }
+                  }
+                },
+                "from": {
+                  "data": "cards"
+                }
+              },
+              {
+                "type": "text",
+                "name": "name",
+                "encode": {
+                  "update": {
+                    "x": {
+                      "signal": "datum.cx+15"
+                    },
+                    "y": {
+                      "signal": "datum.cy+22"
+                    },
+                    "text": {
+                      "field": "label"
+                    },
+                    "font": {
+                      "value": "Segoe UI"
+                    },
+                    "fontSize": {
+                      "value": 15
+                    },
+                    "baseline": {
+                      "value": "middle"
+                    },
+                    "fill": {
+                      "value": "#182c43"
+                    },
+                    "fontWeight": {
+                      "value": 600
+                    },
+                    "limit": {
+                      "signal": "cardWidth-82"
+                    }
+                  }
+                },
+                "from": {
+                  "data": "cards"
+                }
+              },
+              {
+                "type": "text",
+                "name": "subtitle",
+                "encode": {
+                  "update": {
+                    "x": {
+                      "signal": "datum.cx+15"
+                    },
+                    "y": {
+                      "signal": "datum.cy+46"
+                    },
+                    "text": {
+                      "field": "subtitle"
+                    },
+                    "font": {
+                      "value": "Segoe UI"
+                    },
+                    "fontSize": {
+                      "value": 10
+                    },
+                    "baseline": {
+                      "value": "middle"
+                    },
+                    "fill": {
+                      "value": "#51657d"
+                    },
+                    "limit": {
+                      "signal": "cardWidth-82"
+                    }
+                  }
+                },
+                "from": {
+                  "data": "cards"
+                }
+              },
+              {
+                "type": "arc",
+                "name": "ring_track",
+                "from": {
+                  "data": "cards"
+                },
+                "encode": {
+                  "update": {
+                    "x": {
+                      "signal": "datum.cx+cardWidth-40"
+                    },
+                    "y": {
+                      "signal": "datum.cy+37"
+                    },
+                    "innerRadius": {
+                      "value": 19
+                    },
+                    "outerRadius": {
+                      "value": 23
+                    },
+                    "startAngle": {
+                      "value": 0
+                    },
+                    "endAngle": {
+                      "signal": "2*PI"
+                    },
+                    "fill": {
+                      "value": "#dce5ef"
+                    }
+                  }
+                }
+              },
+              {
+                "type": "arc",
+                "name": "ring_value",
+                "from": {
+                  "data": "cards"
+                },
+                "encode": {
+                  "update": {
+                    "x": {
+                      "signal": "datum.cx+cardWidth-40"
+                    },
+                    "y": {
+                      "signal": "datum.cy+37"
+                    },
+                    "innerRadius": {
+                      "value": 19
+                    },
+                    "outerRadius": {
+                      "value": 23
+                    },
+                    "startAngle": {
+                      "value": 0
+                    },
+                    "endAngle": {
+                      "signal": "datum.count==3 ? 2*PI*datum.pressure/100 : 0"
+                    },
+                    "fill": {
+                      "field": "color"
+                    }
+                  }
+                }
+              },
+              {
+                "type": "text",
+                "name": "score",
+                "encode": {
+                  "update": {
+                    "x": {
+                      "signal": "datum.cx+cardWidth-40"
+                    },
+                    "y": {
+                      "signal": "datum.cy+37"
+                    },
+                    "text": {
+                      "field": "score"
+                    },
+                    "font": {
+                      "value": "Segoe UI"
+                    },
+                    "fontSize": {
+                      "value": 11
+                    },
+                    "baseline": {
+                      "value": "middle"
+                    },
+                    "fill": {
+                      "value": "#182c43"
+                    },
+                    "align": {
+                      "value": "center"
+                    },
+                    "fontWeight": {
+                      "value": 600
+                    }
+                  }
+                },
+                "from": {
+                  "data": "cards"
+                }
+              },
+              {
+                "type": "text",
+                "name": "cpu_label",
+                "encode": {
+                  "update": {
+                    "x": {
+                      "signal": "datum.cx+14+0*(cardWidth-28)/3"
+                    },
+                    "y": {
+                      "signal": "datum.cy+80"
+                    },
+                    "text": {
+                      "value": "CPU"
+                    },
+                    "font": {
+                      "value": "Segoe UI"
+                    },
+                    "fontSize": {
+                      "value": 10
+                    },
+                    "baseline": {
+                      "value": "middle"
+                    },
+                    "fill": {
+                      "value": "#51657d"
+                    }
+                  }
+                },
+                "from": {
+                  "data": "cards"
+                }
+              },
+              {
+                "type": "text",
+                "name": "cpu_number",
+                "encode": {
+                  "update": {
+                    "x": {
+                      "signal": "datum.cx+14+0*(cardWidth-28)/3+(cardWidth-28)/3-10"
+                    },
+                    "y": {
+                      "signal": "datum.cy+80"
+                    },
+                    "text": {
+                      "signal": "datum.cpu_valid?format(datum.cpu,'.0f')+'%':'N/A'"
+                    },
+                    "font": {
+                      "value": "Segoe UI"
+                    },
+                    "fontSize": {
+                      "value": 10
+                    },
+                    "baseline": {
+                      "value": "middle"
+                    },
+                    "fill": {
+                      "value": "#182c43"
+                    },
+                    "align": {
+                      "value": "right"
+                    }
+                  }
+                },
+                "from": {
+                  "data": "cards"
+                }
+              },
+              {
+                "type": "rect",
+                "name": "cpu_track",
+                "encode": {
+                  "update": {
+                    "x": {
+                      "signal": "datum.cx+14+0*(cardWidth-28)/3"
+                    },
+                    "y": {
+                      "signal": "datum.cy+94"
+                    },
+                    "width": {
+                      "signal": "(cardWidth-28)/3-12"
+                    },
+                    "height": {
+                      "signal": "7"
+                    },
+                    "fill": {
+                      "value": "#dce5ef"
+                    },
+                    "cornerRadius": {
+                      "value": 5
+                    }
+                  }
+                },
+                "from": {
+                  "data": "cards"
+                }
+              },
+              {
+                "type": "rect",
+                "name": "cpu_bar",
+                "encode": {
+                  "update": {
+                    "x": {
+                      "signal": "datum.cx+14+0*(cardWidth-28)/3"
+                    },
+                    "y": {
+                      "signal": "datum.cy+94"
+                    },
+                    "width": {
+                      "signal": "datum.cpu_valid?((cardWidth-28)/3-12)*datum.cpu/100:0"
+                    },
+                    "height": {
+                      "signal": "7"
+                    },
+                    "fill": {
+                      "signal": "datum.cpu>=critical?'#c72d45':datum.cpu>=warning?'#ad6500':'#177e4b'"
+                    },
+                    "cornerRadius": {
+                      "value": 5
+                    }
+                  }
+                },
+                "from": {
+                  "data": "cards"
+                }
+              },
+              {
+                "type": "text",
+                "name": "ram_label",
+                "encode": {
+                  "update": {
+                    "x": {
+                      "signal": "datum.cx+14+1*(cardWidth-28)/3"
+                    },
+                    "y": {
+                      "signal": "datum.cy+80"
+                    },
+                    "text": {
+                      "value": "RAM"
+                    },
+                    "font": {
+                      "value": "Segoe UI"
+                    },
+                    "fontSize": {
+                      "value": 10
+                    },
+                    "baseline": {
+                      "value": "middle"
+                    },
+                    "fill": {
+                      "value": "#51657d"
+                    }
+                  }
+                },
+                "from": {
+                  "data": "cards"
+                }
+              },
+              {
+                "type": "text",
+                "name": "ram_number",
+                "encode": {
+                  "update": {
+                    "x": {
+                      "signal": "datum.cx+14+1*(cardWidth-28)/3+(cardWidth-28)/3-10"
+                    },
+                    "y": {
+                      "signal": "datum.cy+80"
+                    },
+                    "text": {
+                      "signal": "datum.ram_valid?format(datum.ram,'.0f')+'%':'N/A'"
+                    },
+                    "font": {
+                      "value": "Segoe UI"
+                    },
+                    "fontSize": {
+                      "value": 10
+                    },
+                    "baseline": {
+                      "value": "middle"
+                    },
+                    "fill": {
+                      "value": "#182c43"
+                    },
+                    "align": {
+                      "value": "right"
+                    }
+                  }
+                },
+                "from": {
+                  "data": "cards"
+                }
+              },
+              {
+                "type": "rect",
+                "name": "ram_track",
+                "encode": {
+                  "update": {
+                    "x": {
+                      "signal": "datum.cx+14+1*(cardWidth-28)/3"
+                    },
+                    "y": {
+                      "signal": "datum.cy+94"
+                    },
+                    "width": {
+                      "signal": "(cardWidth-28)/3-12"
+                    },
+                    "height": {
+                      "signal": "7"
+                    },
+                    "fill": {
+                      "value": "#dce5ef"
+                    },
+                    "cornerRadius": {
+                      "value": 5
+                    }
+                  }
+                },
+                "from": {
+                  "data": "cards"
+                }
+              },
+              {
+                "type": "rect",
+                "name": "ram_bar",
+                "encode": {
+                  "update": {
+                    "x": {
+                      "signal": "datum.cx+14+1*(cardWidth-28)/3"
+                    },
+                    "y": {
+                      "signal": "datum.cy+94"
+                    },
+                    "width": {
+                      "signal": "datum.ram_valid?((cardWidth-28)/3-12)*datum.ram/100:0"
+                    },
+                    "height": {
+                      "signal": "7"
+                    },
+                    "fill": {
+                      "signal": "datum.ram>=critical?'#c72d45':datum.ram>=warning?'#ad6500':'#177e4b'"
+                    },
+                    "cornerRadius": {
+                      "value": 5
+                    }
+                  }
+                },
+                "from": {
+                  "data": "cards"
+                }
+              },
+              {
+                "type": "text",
+                "name": "disk_label",
+                "encode": {
+                  "update": {
+                    "x": {
+                      "signal": "datum.cx+14+2*(cardWidth-28)/3"
+                    },
+                    "y": {
+                      "signal": "datum.cy+80"
+                    },
+                    "text": {
+                      "value": "DISK"
+                    },
+                    "font": {
+                      "value": "Segoe UI"
+                    },
+                    "fontSize": {
+                      "value": 10
+                    },
+                    "baseline": {
+                      "value": "middle"
+                    },
+                    "fill": {
+                      "value": "#51657d"
+                    }
+                  }
+                },
+                "from": {
+                  "data": "cards"
+                }
+              },
+              {
+                "type": "text",
+                "name": "disk_number",
+                "encode": {
+                  "update": {
+                    "x": {
+                      "signal": "datum.cx+14+2*(cardWidth-28)/3+(cardWidth-28)/3-10"
+                    },
+                    "y": {
+                      "signal": "datum.cy+80"
+                    },
+                    "text": {
+                      "signal": "datum.disk_valid?format(datum.disk,'.0f')+'%':'N/A'"
+                    },
+                    "font": {
+                      "value": "Segoe UI"
+                    },
+                    "fontSize": {
+                      "value": 10
+                    },
+                    "baseline": {
+                      "value": "middle"
+                    },
+                    "fill": {
+                      "value": "#182c43"
+                    },
+                    "align": {
+                      "value": "right"
+                    }
+                  }
+                },
+                "from": {
+                  "data": "cards"
+                }
+              },
+              {
+                "type": "rect",
+                "name": "disk_track",
+                "encode": {
+                  "update": {
+                    "x": {
+                      "signal": "datum.cx+14+2*(cardWidth-28)/3"
+                    },
+                    "y": {
+                      "signal": "datum.cy+94"
+                    },
+                    "width": {
+                      "signal": "(cardWidth-28)/3-12"
+                    },
+                    "height": {
+                      "signal": "7"
+                    },
+                    "fill": {
+                      "value": "#dce5ef"
+                    },
+                    "cornerRadius": {
+                      "value": 5
+                    }
+                  }
+                },
+                "from": {
+                  "data": "cards"
+                }
+              },
+              {
+                "type": "rect",
+                "name": "disk_bar",
+                "encode": {
+                  "update": {
+                    "x": {
+                      "signal": "datum.cx+14+2*(cardWidth-28)/3"
+                    },
+                    "y": {
+                      "signal": "datum.cy+94"
+                    },
+                    "width": {
+                      "signal": "datum.disk_valid?((cardWidth-28)/3-12)*datum.disk/100:0"
+                    },
+                    "height": {
+                      "signal": "7"
+                    },
+                    "fill": {
+                      "signal": "datum.disk>=critical?'#c72d45':datum.disk>=warning?'#ad6500':'#177e4b'"
+                    },
+                    "cornerRadius": {
+                      "value": 5
+                    }
+                  }
+                },
+                "from": {
+                  "data": "cards"
+                }
+              },
+              {
+                "type": "text",
+                "name": "trendlabel",
+                "encode": {
+                  "update": {
+                    "x": {
+                      "signal": "datum.cx+14"
+                    },
+                    "y": {
+                      "signal": "datum.cy+126"
+                    },
+                    "text": {
+                      "value": "CPU / RAM · 1h"
+                    },
+                    "font": {
+                      "value": "Segoe UI"
+                    },
+                    "fontSize": {
+                      "value": 11
+                    },
+                    "baseline": {
+                      "value": "middle"
+                    },
+                    "fill": {
+                      "value": "#51657d"
+                    }
+                  }
+                },
+                "from": {
+                  "data": "cards"
+                }
+              },
+              {
+                "type": "rect",
+                "name": "plot",
+                "encode": {
+                  "update": {
+                    "x": {
+                      "signal": "datum.cx+14"
+                    },
+                    "y": {
+                      "signal": "datum.cy+143"
+                    },
+                    "width": {
+                      "signal": "cardWidth-28"
+                    },
+                    "height": {
+                      "signal": "74"
+                    },
+                    "fill": {
+                      "value": "transparent"
+                    },
+                    "cornerRadius": {
+                      "value": 5
+                    },
+                    "stroke": {
+                      "value": "#c6d3e2"
+                    },
+                    "strokeWidth": {
+                      "value": 1
+                    }
+                  }
+                },
+                "from": {
+                  "data": "cards"
+                }
+              },
+              {
+                "type": "group",
+                "name": "cpu_facets",
+                "from": {
+                  "facet": {
+                    "name": "cpu_points",
+                    "data": "trends",
+                    "groupby": "entity"
+                  }
+                },
+                "marks": [
+                  {
+                    "type": "line",
+                    "from": {
+                      "data": "cpu_points"
+                    },
+                    "encode": {
+                      "update": {
+                        "x": {
+                          "signal": "datum.cx+14+scale('time',datum._time)"
+                        },
+                        "y": {
+                          "signal": "datum.cy+217-74*datum.cpu_pct/100"
+                        },
+                        "defined": {
+                          "signal": "isNumber(datum.cpu_pct) && isFinite(datum.cpu_pct) && datum.cpu_pct>=0 && datum.cpu_pct<=100"
+                        },
+                        "stroke": {
+                          "value": "#007f87"
+                        },
+                        "strokeWidth": {
+                          "value": 2
+                        }
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "group",
+                "name": "ram_facets",
+                "from": {
+                  "facet": {
+                    "name": "ram_points",
+                    "data": "trends",
+                    "groupby": "entity"
+                  }
+                },
+                "marks": [
+                  {
+                    "type": "line",
+                    "from": {
+                      "data": "ram_points"
+                    },
+                    "encode": {
+                      "update": {
+                        "x": {
+                          "signal": "datum.cx+14+scale('time',datum._time)"
+                        },
+                        "y": {
+                          "signal": "datum.cy+217-74*datum.ram_pct/100"
+                        },
+                        "defined": {
+                          "signal": "isNumber(datum.ram_pct) && isFinite(datum.ram_pct) && datum.ram_pct>=0 && datum.ram_pct<=100"
+                        },
+                        "stroke": {
+                          "value": "#1c65cc"
+                        },
+                        "strokeWidth": {
+                          "value": 2
+                        }
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "name": "volume_label",
+                "encode": {
+                  "update": {
+                    "x": {
+                      "signal": "datum.cx+14"
+                    },
+                    "y": {
+                      "signal": "datum.cy+239"
+                    },
+                    "text": {
+                      "value": "Fullest volume · peak 1h"
+                    },
+                    "font": {
+                      "value": "Segoe UI"
+                    },
+                    "fontSize": {
+                      "value": 10
+                    },
+                    "baseline": {
+                      "value": "middle"
+                    },
+                    "fill": {
+                      "value": "#51657d"
+                    }
+                  }
+                },
+                "from": {
+                  "data": "cards"
+                }
+              },
+              {
+                "type": "text",
+                "name": "volume_drive",
+                "encode": {
+                  "update": {
+                    "x": {
+                      "signal": "datum.cx+14"
+                    },
+                    "y": {
+                      "signal": "datum.cy+265"
+                    },
+                    "text": {
+                      "signal": "isValid(datum.drive)?datum.drive:'N/A'"
+                    },
+                    "font": {
+                      "value": "Segoe UI"
+                    },
+                    "fontSize": {
+                      "value": 11
+                    },
+                    "baseline": {
+                      "value": "middle"
+                    },
+                    "fill": {
+                      "value": "#182c43"
+                    },
+                    "limit": {
+                      "value": 50
+                    }
+                  }
+                },
+                "from": {
+                  "data": "cards"
+                }
+              },
+              {
+                "type": "rect",
+                "name": "volume_track",
+                "encode": {
+                  "update": {
+                    "x": {
+                      "signal": "datum.cx+64"
+                    },
+                    "y": {
+                      "signal": "datum.cy+259"
+                    },
+                    "width": {
+                      "signal": "cardWidth-126"
+                    },
+                    "height": {
+                      "signal": "10"
+                    },
+                    "fill": {
+                      "value": "#dce5ef"
+                    },
+                    "cornerRadius": {
+                      "value": 5
+                    }
+                  }
+                },
+                "from": {
+                  "data": "cards"
+                }
+              },
+              {
+                "type": "rect",
+                "name": "volume_bar",
+                "encode": {
+                  "update": {
+                    "x": {
+                      "signal": "datum.cx+64"
+                    },
+                    "y": {
+                      "signal": "datum.cy+259"
+                    },
+                    "width": {
+                      "signal": "isNumber(datum.volume_pct)?(cardWidth-126)*datum.volume_pct/100:0"
+                    },
+                    "height": {
+                      "signal": "10"
+                    },
+                    "fill": {
+                      "signal": "datum.volume_pct>=critical?'#c72d45':datum.volume_pct>=warning?'#ad6500':'#177e4b'"
+                    },
+                    "cornerRadius": {
+                      "value": 5
+                    }
+                  }
+                },
+                "from": {
+                  "data": "cards"
+                }
+              },
+              {
+                "type": "text",
+                "name": "volume_number",
+                "encode": {
+                  "update": {
+                    "x": {
+                      "signal": "datum.cx+cardWidth-14"
+                    },
+                    "y": {
+                      "signal": "datum.cy+265"
+                    },
+                    "text": {
+                      "signal": "isNumber(datum.volume_pct)?format(datum.volume_pct,'.0f')+'%':'N/A'"
+                    },
+                    "font": {
+                      "value": "Segoe UI"
+                    },
+                    "fontSize": {
+                      "value": 11
+                    },
+                    "baseline": {
+                      "value": "middle"
+                    },
+                    "fill": {
+                      "value": "#182c43"
+                    },
+                    "align": {
+                      "value": "right"
+                    }
+                  }
+                },
+                "from": {
+                  "data": "cards"
+                }
+              },
+              {
+                "type": "text",
+                "name": "nav",
+                "encode": {
+                  "update": {
+                    "x": {
+                      "signal": "datum.cx+cardWidth-14"
+                    },
+                    "y": {
+                      "signal": "datum.cy+297"
+                    },
+                    "text": {
+                      "signal": "datum.cockpit_url ? 'Open cockpit →' : 'Cockpit link not configured'"
+                    },
+                    "font": {
+                      "value": "Segoe UI"
+                    },
+                    "fontSize": {
+                      "value": 10
+                    },
+                    "baseline": {
+                      "value": "middle"
+                    },
+                    "fill": {
+                      "value": "#51657d"
+                    },
+                    "align": {
+                      "value": "right"
+                    },
+                    "href": {
+                      "signal": "datum.cockpit_url || null"
+                    },
+                    "cursor": {
+                      "signal": "datum.cockpit_url?'pointer':'default'"
+                    }
+                  }
+                },
+                "from": {
+                  "data": "cards"
+                }
+              },
+              {
+                "type": "text",
+                "name": "footer",
+                "encode": {
+                  "update": {
+                    "x": {
+                      "signal": "0"
+                    },
+                    "y": {
+                      "signal": "height-8"
+                    },
+                    "text": {
+                      "value": "Green <85% · Amber 85–<95% · Red ≥95% · Missing = unknown · CPU teal / RAM blue · No availability guarantee"
+                    },
+                    "font": {
+                      "value": "Segoe UI"
+                    },
+                    "fontSize": {
+                      "value": 10
+                    },
+                    "baseline": {
+                      "value": "middle"
+                    },
+                    "fill": {
+                      "value": "#51657d"
+                    },
+                    "limit": {
+                      "signal": "width"
+                    }
+                  }
+                }
+              }
+            ],
+            "scales": [
+              {
+                "name": "time",
+                "type": "linear",
+                "domain": {
+                  "data": "trends",
+                  "field": "_time"
+                },
+                "range": [
+                  0,
+                  {
+                    "signal": "cardWidth-28"
+                  }
+                ],
+                "zero": false
+              }
+            ]
+          }
+        }
+      },
+      "layout": {
+        "x": 0,
+        "y": 0,
+        "width": 12,
+        "height": 13
+      },
+      "id": 1000
+    },
+    {
+      "definition": {
+        "type": "group",
+        "title": "Hosts & volumes | compare all applications",
+        "layout_type": "ordered",
+        "background_color": "transparent",
+        "show_title": true,
+        "widgets": [
+          {
+            "definition": {
+              "type": "query_table",
+              "title": "Host resources | application, environment, host",
+              "has_search_bar": "always",
+              "time": {
+                "live_span": "5m"
+              },
+              "requests": [
+                {
+                  "response_format": "scalar",
+                  "queries": [
+                    {
+                      "data_source": "metrics",
+                      "name": "q0",
+                      "query": "min:system.cpu.idle{maison:vca AND ((application:app07656 AND host IN (sapp01055)) OR (application:app07739 AND host IN (sapp01051,sapp01077)) OR (application:app08213 AND host IN (sapp01078,sapp01098)) OR (application:app05236 AND host IN (sapp00185,sapp00184,sapp01044,sapp01045,sapp00178,sapp00177,sapp00175,sapp00176)) OR (application:app05236 AND host IN (sapp01129)) OR (application:app05236 AND host IN (slic00025)) OR (application:app05236 AND host IN (slic00027)) OR (application:app06976 AND host IN (sapp00951,sora00003))) AND environment IN (test,quality,pre-production,production,prd) AND $environment} by {application,environment,host}.fill(null)",
+                      "aggregator": "min"
+                    },
+                    {
+                      "data_source": "metrics",
+                      "name": "q1",
+                      "query": "min:system.mem.pct_usable{maison:vca AND ((application:app07656 AND host IN (sapp01055)) OR (application:app07739 AND host IN (sapp01051,sapp01077)) OR (application:app08213 AND host IN (sapp01078,sapp01098)) OR (application:app05236 AND host IN (sapp00185,sapp00184,sapp01044,sapp01045,sapp00178,sapp00177,sapp00175,sapp00176)) OR (application:app05236 AND host IN (sapp01129)) OR (application:app05236 AND host IN (slic00025)) OR (application:app05236 AND host IN (slic00027)) OR (application:app06976 AND host IN (sapp00951,sora00003))) AND environment IN (test,quality,pre-production,production,prd) AND $environment} by {application,environment,host}.fill(null)",
+                      "aggregator": "min"
+                    },
+                    {
+                      "data_source": "metrics",
+                      "name": "q2",
+                      "query": "max:system.disk.in_use{maison:vca AND ((application:app07656 AND host IN (sapp01055)) OR (application:app07739 AND host IN (sapp01051,sapp01077)) OR (application:app08213 AND host IN (sapp01078,sapp01098)) OR (application:app05236 AND host IN (sapp00185,sapp00184,sapp01044,sapp01045,sapp00178,sapp00177,sapp00175,sapp00176)) OR (application:app05236 AND host IN (sapp01129)) OR (application:app05236 AND host IN (slic00025)) OR (application:app05236 AND host IN (slic00027)) OR (application:app06976 AND host IN (sapp00951,sora00003))) AND environment IN (test,quality,pre-production,production,prd) AND $environment} by {application,environment,host}.fill(null)",
+                      "aggregator": "max"
+                    },
+                    {
+                      "data_source": "metrics",
+                      "name": "q3",
+                      "query": "min:system.disk.free{maison:vca AND ((application:app07656 AND host IN (sapp01055)) OR (application:app07739 AND host IN (sapp01051,sapp01077)) OR (application:app08213 AND host IN (sapp01078,sapp01098)) OR (application:app05236 AND host IN (sapp00185,sapp00184,sapp01044,sapp01045,sapp00178,sapp00177,sapp00175,sapp00176)) OR (application:app05236 AND host IN (sapp01129)) OR (application:app05236 AND host IN (slic00025)) OR (application:app05236 AND host IN (slic00027)) OR (application:app06976 AND host IN (sapp00951,sora00003))) AND environment IN (test,quality,pre-production,production,prd) AND $environment} by {application,environment,host}.fill(null)",
+                      "aggregator": "min"
+                    },
+                    {
+                      "data_source": "metrics",
+                      "name": "q4",
+                      "query": "min:system.uptime{maison:vca AND ((application:app07656 AND host IN (sapp01055)) OR (application:app07739 AND host IN (sapp01051,sapp01077)) OR (application:app08213 AND host IN (sapp01078,sapp01098)) OR (application:app05236 AND host IN (sapp00185,sapp00184,sapp01044,sapp01045,sapp00178,sapp00177,sapp00175,sapp00176)) OR (application:app05236 AND host IN (sapp01129)) OR (application:app05236 AND host IN (slic00025)) OR (application:app05236 AND host IN (slic00027)) OR (application:app06976 AND host IN (sapp00951,sora00003))) AND environment IN (test,quality,pre-production,production,prd) AND $environment} by {application,environment,host}.fill(null)",
+                      "aggregator": "last"
+                    }
+                  ],
+                  "formulas": [
+                    {
+                      "formula": "100 - q0",
+                      "alias": "CPU peak %",
+                      "cell_display_mode": "number",
+                      "conditional_formats": [
+                        {
+                          "comparator": ">=",
+                          "value": 95,
+                          "palette": "white_on_red"
+                        },
+                        {
+                          "comparator": ">=",
+                          "value": 85,
+                          "palette": "white_on_yellow"
+                        },
+                        {
+                          "comparator": "<",
+                          "value": 85,
+                          "palette": "white_on_green"
+                        }
+                      ]
+                    },
+                    {
+                      "formula": "100 * (1 - q1)",
+                      "alias": "RAM utilization peak %",
+                      "cell_display_mode": "number",
+                      "conditional_formats": [
+                        {
+                          "comparator": ">=",
+                          "value": 95,
+                          "palette": "white_on_red"
+                        },
+                        {
+                          "comparator": ">=",
+                          "value": 85,
+                          "palette": "white_on_yellow"
+                        },
+                        {
+                          "comparator": "<",
+                          "value": 85,
+                          "palette": "white_on_green"
+                        }
+                      ]
+                    },
+                    {
+                      "formula": "100 * q2",
+                      "alias": "Disk used peak %",
+                      "cell_display_mode": "number",
+                      "conditional_formats": [
+                        {
+                          "comparator": ">=",
+                          "value": 95,
+                          "palette": "white_on_red"
+                        },
+                        {
+                          "comparator": ">=",
+                          "value": 85,
+                          "palette": "white_on_yellow"
+                        },
+                        {
+                          "comparator": "<",
+                          "value": 85,
+                          "palette": "white_on_green"
+                        }
+                      ]
+                    },
+                    {
+                      "formula": "q3 / 1073741824",
+                      "alias": "Disk free minimum GiB",
+                      "cell_display_mode": "number",
+                      "conditional_formats": [
+                        {
+                          "comparator": "<",
+                          "value": 2,
+                          "palette": "white_on_red"
+                        },
+                        {
+                          "comparator": "<",
+                          "value": 5,
+                          "palette": "white_on_yellow"
+                        },
+                        {
+                          "comparator": ">=",
+                          "value": 5,
+                          "palette": "white_on_green"
+                        }
+                      ]
+                    },
+                    {
+                      "formula": "q4 / 3600",
+                      "alias": "Shortest uptime h",
+                      "cell_display_mode": "number"
+                    }
+                  ],
+                  "sort": {
+                    "count": 100,
+                    "order_by": [
+                      {
+                        "type": "formula",
+                        "index": 0,
+                        "order": "desc"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            "layout": {
+              "x": 0,
+              "y": 0,
+              "width": 12,
+              "height": 6
+            }
+          },
+          {
+            "definition": {
+              "type": "query_table",
+              "title": "Volume capacity | application, environment, host, volume",
+              "has_search_bar": "always",
+              "time": {
+                "live_span": "5m"
+              },
+              "requests": [
+                {
+                  "response_format": "scalar",
+                  "queries": [
+                    {
+                      "data_source": "metrics",
+                      "name": "q0",
+                      "query": "max:system.disk.in_use{maison:vca AND ((application:app07656 AND host IN (sapp01055)) OR (application:app07739 AND host IN (sapp01051,sapp01077)) OR (application:app08213 AND host IN (sapp01078,sapp01098)) OR (application:app05236 AND host IN (sapp00185,sapp00184,sapp01044,sapp01045,sapp00178,sapp00177,sapp00175,sapp00176)) OR (application:app05236 AND host IN (sapp01129)) OR (application:app05236 AND host IN (slic00025)) OR (application:app05236 AND host IN (slic00027)) OR (application:app06976 AND host IN (sapp00951,sora00003))) AND environment IN (test,quality,pre-production,production,prd) AND $environment} by {application,environment,host,device}.fill(null)",
+                      "aggregator": "max"
+                    },
+                    {
+                      "data_source": "metrics",
+                      "name": "q1",
+                      "query": "min:system.disk.free{maison:vca AND ((application:app07656 AND host IN (sapp01055)) OR (application:app07739 AND host IN (sapp01051,sapp01077)) OR (application:app08213 AND host IN (sapp01078,sapp01098)) OR (application:app05236 AND host IN (sapp00185,sapp00184,sapp01044,sapp01045,sapp00178,sapp00177,sapp00175,sapp00176)) OR (application:app05236 AND host IN (sapp01129)) OR (application:app05236 AND host IN (slic00025)) OR (application:app05236 AND host IN (slic00027)) OR (application:app06976 AND host IN (sapp00951,sora00003))) AND environment IN (test,quality,pre-production,production,prd) AND $environment} by {application,environment,host,device}.fill(null)",
+                      "aggregator": "min"
+                    },
+                    {
+                      "data_source": "metrics",
+                      "name": "q2",
+                      "query": "max:system.disk.total{maison:vca AND ((application:app07656 AND host IN (sapp01055)) OR (application:app07739 AND host IN (sapp01051,sapp01077)) OR (application:app08213 AND host IN (sapp01078,sapp01098)) OR (application:app05236 AND host IN (sapp00185,sapp00184,sapp01044,sapp01045,sapp00178,sapp00177,sapp00175,sapp00176)) OR (application:app05236 AND host IN (sapp01129)) OR (application:app05236 AND host IN (slic00025)) OR (application:app05236 AND host IN (slic00027)) OR (application:app06976 AND host IN (sapp00951,sora00003))) AND environment IN (test,quality,pre-production,production,prd) AND $environment} by {application,environment,host,device}.fill(null)",
+                      "aggregator": "last"
+                    }
+                  ],
+                  "formulas": [
+                    {
+                      "formula": "100 * q0",
+                      "alias": "Disk used peak %",
+                      "cell_display_mode": "number",
+                      "conditional_formats": [
+                        {
+                          "comparator": ">=",
+                          "value": 95,
+                          "palette": "white_on_red"
+                        },
+                        {
+                          "comparator": ">=",
+                          "value": 85,
+                          "palette": "white_on_yellow"
+                        },
+                        {
+                          "comparator": "<",
+                          "value": 85,
+                          "palette": "white_on_green"
+                        }
+                      ]
+                    },
+                    {
+                      "formula": "q1 / 1073741824",
+                      "alias": "Disk free minimum GiB",
+                      "cell_display_mode": "number",
+                      "conditional_formats": [
+                        {
+                          "comparator": "<",
+                          "value": 2,
+                          "palette": "white_on_red"
+                        },
+                        {
+                          "comparator": "<",
+                          "value": 5,
+                          "palette": "white_on_yellow"
+                        },
+                        {
+                          "comparator": ">=",
+                          "value": 5,
+                          "palette": "white_on_green"
+                        }
+                      ]
+                    },
+                    {
+                      "formula": "q2 / 1073741824",
+                      "alias": "Volume capacity GiB",
+                      "cell_display_mode": "number"
+                    }
+                  ],
+                  "sort": {
+                    "count": 100,
+                    "order_by": [
+                      {
+                        "type": "formula",
+                        "index": 0,
+                        "order": "desc"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            "layout": {
+              "x": 0,
+              "y": 6,
+              "width": 12,
+              "height": 6
+            }
+          },
+          {
+            "definition": {
+              "type": "note",
+              "content": "Shared application ID app05236: use host to distinguish Orion, Magics LM, Solidworks LM and Hypermill LM. Scope is restricted to the supplied inventory. Missing hosts are not represented in metric tables; reconcile with INVENTORY.json.",
+              "background_color": "gray",
+              "font_size": "14",
+              "text_align": "left",
+              "show_tick": false
+            },
+            "layout": {
+              "x": 0,
+              "y": 12,
+              "width": 12,
+              "height": 3
+            }
+          }
+        ]
+      },
+      "id": 1001
+    },
+    {
+      "definition": {
+        "type": "query_table",
+        "title": "Raw host data | application + host | cpu_pct / ram_pct / disk_pct",
+        "time": {
+          "live_span": "1h"
+        },
+        "has_search_bar": "always",
+        "requests": [
+          {
+            "response_format": "scalar",
+            "queries": [
+              {
+                "data_source": "metrics",
+                "name": "cpu_idle",
+                "query": "min:system.cpu.idle{maison:vca AND ((application:app07656 AND host IN (sapp01055)) OR (application:app07739 AND host IN (sapp01051,sapp01077)) OR (application:app08213 AND host IN (sapp01078,sapp01098)) OR (application:app05236 AND host IN (sapp00185,sapp00184,sapp01044,sapp01045,sapp00178,sapp00177,sapp00175,sapp00176)) OR (application:app05236 AND host IN (sapp01129)) OR (application:app05236 AND host IN (slic00025)) OR (application:app05236 AND host IN (slic00027)) OR (application:app06976 AND host IN (sapp00951,sora00003))) AND environment IN (test,quality,pre-production,production,prd) AND $environment} by {application,host}.fill(null)",
+                "aggregator": "min"
+              },
+              {
+                "data_source": "metrics",
+                "name": "ram_available",
+                "query": "min:system.mem.pct_usable{maison:vca AND ((application:app07656 AND host IN (sapp01055)) OR (application:app07739 AND host IN (sapp01051,sapp01077)) OR (application:app08213 AND host IN (sapp01078,sapp01098)) OR (application:app05236 AND host IN (sapp00185,sapp00184,sapp01044,sapp01045,sapp00178,sapp00177,sapp00175,sapp00176)) OR (application:app05236 AND host IN (sapp01129)) OR (application:app05236 AND host IN (slic00025)) OR (application:app05236 AND host IN (slic00027)) OR (application:app06976 AND host IN (sapp00951,sora00003))) AND environment IN (test,quality,pre-production,production,prd) AND $environment} by {application,host}.fill(null)",
+                "aggregator": "min"
+              },
+              {
+                "data_source": "metrics",
+                "name": "disk_used",
+                "query": "max:system.disk.in_use{maison:vca AND ((application:app07656 AND host IN (sapp01055)) OR (application:app07739 AND host IN (sapp01051,sapp01077)) OR (application:app08213 AND host IN (sapp01078,sapp01098)) OR (application:app05236 AND host IN (sapp00185,sapp00184,sapp01044,sapp01045,sapp00178,sapp00177,sapp00175,sapp00176)) OR (application:app05236 AND host IN (sapp01129)) OR (application:app05236 AND host IN (slic00025)) OR (application:app05236 AND host IN (slic00027)) OR (application:app06976 AND host IN (sapp00951,sora00003))) AND environment IN (test,quality,pre-production,production,prd) AND $environment} by {application,host}.fill(null)",
+                "aggregator": "max"
+              }
+            ],
+            "formulas": [
+              {
+                "formula": "100 - cpu_idle",
+                "alias": "cpu_pct"
+              },
+              {
+                "formula": "100 * (1 - ram_available)",
+                "alias": "ram_pct"
+              },
+              {
+                "formula": "100 * disk_used",
+                "alias": "disk_pct"
+              }
+            ],
+            "sort": {
+              "count": 100,
+              "order_by": [
+                {
+                  "type": "group",
+                  "name": "application",
+                  "order": "asc"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "layout": {
+        "x": 0,
+        "y": 0,
+        "width": 12,
+        "height": 6
+      },
+      "id": 1002
+    }
+  ],
+  "tabs": [
+    {
+      "id": "3788e660-b3fd-5939-aca5-f12d5f2cc081",
+      "name": "Overview",
+      "widget_ids": [
+        1000
+      ]
+    },
+    {
+      "id": "f8ca1975-8a03-58b6-a594-d91ad547b790",
+      "name": "Hosts & Volumes",
+      "widget_ids": [
+        1001
+      ]
+    },
+    {
+      "id": "c5a3b851-c756-5c2b-a837-f7f7d97ecbb9",
+      "name": "Data Validation",
+      "widget_ids": [
+        1002
+      ]
+    }
+  ]
+}
